@@ -51,10 +51,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     @objc func login(){
-        //let viewController = ViewController()
-        //self.present(viewController, animated: true, completion: nil)
         let loginView = LoginViewController()
-        //从下弹出一个界面作为登陆界面，completion作为闭包，可以写一些弹出loginView时的一些操作
         self.present(loginView, animated: true, completion: nil)
     }
     

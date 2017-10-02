@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3C486F791F7F605D009040D1 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C486F781F7F605D009040D1 /* RegisterViewController.swift */; };
 		3CE967CA1F7E8335003FD6A1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE967C91F7E8335003FD6A1 /* AppDelegate.swift */; };
 		3CE967CC1F7E8335003FD6A1 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 3CE967CB1F7E8335003FD6A1 /* art.scnassets */; };
 		3CE967CE1F7E8335003FD6A1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE967CD1F7E8335003FD6A1 /* ViewController.swift */; };
@@ -18,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3C486F781F7F605D009040D1 /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		3CE967C61F7E8335003FD6A1 /* MyAR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyAR.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3CE967C91F7E8335003FD6A1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3CE967CB1F7E8335003FD6A1 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
@@ -41,11 +43,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3C8F4D6E1F80DE830040D0C0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		3CE967BD1F7E8335003FD6A1 = {
 			isa = PBXGroup;
 			children = (
 				3CE967C81F7E8335003FD6A1 /* MyAR */,
 				3CE967C71F7E8335003FD6A1 /* Products */,
+				3C8F4D6E1F80DE830040D0C0 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -69,6 +79,7 @@
 				3CE967D71F7E8335003FD6A1 /* Info.plist */,
 				3CE967E11F7E8AD9003FD6A1 /* LoginViewController.swift */,
 				3CE967E51F7E8DA6003FD6A1 /* MapViewController.swift */,
+				3C486F781F7F605D009040D1 /* RegisterViewController.swift */,
 			);
 			path = MyAR;
 			sourceTree = "<group>";
@@ -106,6 +117,11 @@
 					3CE967C51F7E8335003FD6A1 = {
 						CreatedOnToolsVersion = 9.0;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.WAC = {
+								enabled = 0;
+							};
+						};
 					};
 				};
 			};
@@ -147,6 +163,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3CE967E31F7E8AD9003FD6A1 /* LoginViewController.swift in Sources */,
+				3C486F791F7F605D009040D1 /* RegisterViewController.swift in Sources */,
 				3CE967CE1F7E8335003FD6A1 /* ViewController.swift in Sources */,
 				3CE967CA1F7E8335003FD6A1 /* AppDelegate.swift in Sources */,
 				3CE967E61F7E8DA6003FD6A1 /* MapViewController.swift in Sources */,
