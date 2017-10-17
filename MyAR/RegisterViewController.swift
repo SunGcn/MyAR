@@ -11,7 +11,8 @@ import UIKit
 class RegisterViewController: UIViewController,UITextFieldDelegate {
 
     //用户密码输入框
-    var txtUser:UITextField!
+    var txtName:UITextField!
+    var txtId:UITextField!
     var txtPwd:UITextField!
     
     override func viewDidLoad() {
@@ -37,29 +38,43 @@ class RegisterViewController: UIViewController,UITextFieldDelegate {
         self.view.addSubview(authorLbl)
         
         //登录框背景
-        let vLogin =  UIView(frame:CGRect(x:15, y:100, width:mainSize.width - 30, height:200))
+        let vLogin =  UIView(frame:CGRect(x:15, y:100, width:mainSize.width - 30, height:300))
         //vLogin.layer.borderWidth = 0.5
         //vLogin.layer.borderColor = UIColor.lightGray.cgColor
         vLogin.backgroundColor = UIColor.white
         self.view.addSubview(vLogin)
         
         //用户名输入框
-        txtUser = UITextField(frame:CGRect(x:30, y:30, width:vLogin.frame.size.width - 60, height:40))
-        txtUser.delegate = self
-        txtUser.autocorrectionType = UITextAutocorrectionType.no
-        txtUser.layer.cornerRadius = 5
-        txtUser.layer.borderColor = UIColor(displayP3Red: 59/255.0, green: 151/255.0, blue: 247/255.0, alpha: 1).cgColor
-        txtUser.layer.borderWidth = 0.5
-        txtUser.leftView = UIView(frame:CGRect(x:0, y:0, width:44, height:44))
-        txtUser.leftViewMode = UITextFieldViewMode.always
+        txtName = UITextField(frame:CGRect(x:30, y:30, width:vLogin.frame.size.width - 60, height:40))
+        txtName.delegate = self
+        txtName.autocorrectionType = UITextAutocorrectionType.no
+        txtName.layer.cornerRadius = 5
+        txtName.layer.borderColor = UIColor(displayP3Red: 59/255.0, green: 151/255.0, blue: 247/255.0, alpha: 1).cgColor
+        txtName.layer.borderWidth = 0.5
+        txtName.leftView = UIView(frame:CGRect(x:0, y:0, width:44, height:44))
+        txtName.leftViewMode = UITextFieldViewMode.always
         //用户名输入框左侧图标
         let imgUser =  UIImageView(frame:CGRect(x:11, y:11, width:22, height:22))
         imgUser.image = UIImage(named:"user")
-        txtUser.leftView!.addSubview(imgUser)
-        vLogin.addSubview(txtUser)
+        txtName.leftView!.addSubview(imgUser)
+        vLogin.addSubview(txtName)
+        
+        //ID输入框
+        txtId = UITextField(frame:CGRect(x:30, y:90, width:vLogin.frame.size.width - 60, height:40))
+        txtId.delegate = self
+        txtId.layer.cornerRadius = 5
+        txtId.layer.borderColor = UIColor(displayP3Red: 59/255.0, green: 151/255.0, blue: 247/255.0, alpha: 1).cgColor
+        txtId.layer.borderWidth = 0.5
+        txtId.leftView = UIView(frame:CGRect(x:0, y:0, width:44, height:44))
+        txtId.leftViewMode = UITextFieldViewMode.always
+        //ID输入框左侧图标
+        let imgName =  UIImageView(frame:CGRect(x:11, y:11, width:22, height:22))
+        imgName.image = UIImage(named:"id")
+        txtId.leftView!.addSubview(imgName)
+        vLogin.addSubview(txtId)
         
         //密码输入框
-        txtPwd = UITextField(frame:CGRect(x:30, y:90, width:vLogin.frame.size.width - 60, height:40))
+        txtPwd = UITextField(frame:CGRect(x:30, y:150, width:vLogin.frame.size.width - 60, height:40))
         txtPwd.delegate = self
         txtPwd.layer.cornerRadius = 5
         txtPwd.layer.borderColor = UIColor(displayP3Red: 59/255.0, green: 151/255.0, blue: 247/255.0, alpha: 1).cgColor
@@ -67,19 +82,19 @@ class RegisterViewController: UIViewController,UITextFieldDelegate {
         txtPwd.isSecureTextEntry = true
         txtPwd.leftView = UIView(frame:CGRect(x:0, y:0, width:44, height:44))
         txtPwd.leftViewMode = UITextFieldViewMode.always
-        
         //密码输入框左侧图标
         let imgPwd =  UIImageView(frame:CGRect(x:11, y:11, width:22, height:22))
         imgPwd.image = UIImage(named:"password")
         txtPwd.leftView!.addSubview(imgPwd)
         vLogin.addSubview(txtPwd)
         
+        
         let registerBtn = UIButton(type: UIButtonType.system)
         registerBtn.setTitle("注 册", for: UIControlState())
         registerBtn.layer.cornerRadius = 8
         registerBtn.layer.borderWidth = 1
         registerBtn.layer.borderColor = UIColor(displayP3Red: 59/255.0, green: 151/255.0, blue: 247/255.0, alpha: 1).cgColor
-        registerBtn.frame = CGRect(x: 30, y: 150, width: vLogin.frame.size.width - 60, height: 35)
+        registerBtn.frame = CGRect(x: 30, y: 210, width: vLogin.frame.size.width - 60, height: 35)
         registerBtn.backgroundColor = UIColor(displayP3Red: 59/255.0, green: 151/255.0, blue: 247/255.0, alpha: 1)
         registerBtn.tintColor = UIColor.white
         registerBtn.addTarget(self, action: #selector(RegisterViewController.register), for: UIControlEvents.touchUpInside)
@@ -97,18 +112,27 @@ class RegisterViewController: UIViewController,UITextFieldDelegate {
         quitBtn.addTarget(self, action: #selector(RegisterViewController.quit), for: UIControlEvents.touchUpInside)
         self.view.addSubview(quitBtn)
         
+        self.view.addGestureRecognizer(UITapGestureRecognizer(
+            target:self,action:#selector(LoginViewController.handleTap(sender:))))
+    }
+    
+    // 点击屏幕空白处收起键盘
+    @objc func handleTap(sender:UITapGestureRecognizer){
+        if sender.state == .ended{
+            self.txtName.resignFirstResponder()
+            self.txtPwd.resignFirstResponder()
+            self.txtId.resignFirstResponder()
+        }
     }
     
     @objc func register(){
-        self.txtUser.resignFirstResponder()
-        self.txtPwd.resignFirstResponder()
-        let alertController = UIAlertController(title: "注册成功!",
-                                                message: nil, preferredStyle: .alert)
-        self.present(alertController, animated: true, completion: nil)
-        //DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+        saveUser(name: txtName.text!, id: txtId.text!, pwd: txtPwd.text!)
         
-        //self.presentedViewController?.dismiss(animated: false, completion: nil)
-        //}
+        self.txtName.resignFirstResponder()
+        self.txtId.resignFirstResponder()
+        self.txtPwd.resignFirstResponder()
+        let alertController = UIAlertController(title: "注册成功!",message: nil, preferredStyle: .alert)
+        self.present(alertController, animated: true, completion: nil)
         self.presentingViewController?.dismiss(animated: true, completion: nil)
     }
 
@@ -122,16 +146,5 @@ class RegisterViewController: UIViewController,UITextFieldDelegate {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

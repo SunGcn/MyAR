@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		3C486F791F7F605D009040D1 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C486F781F7F605D009040D1 /* RegisterViewController.swift */; };
+		3C57ECE91F8C8AC3005D9D6F /* myar.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3C57ECE71F8C8AC3005D9D6F /* myar.xcdatamodeld */; };
+		3C57ECEC1F8C8E0B005D9D6F /* Extensive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C57ECEB1F8C8E0B005D9D6F /* Extensive.swift */; };
 		3CE967CA1F7E8335003FD6A1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE967C91F7E8335003FD6A1 /* AppDelegate.swift */; };
 		3CE967CC1F7E8335003FD6A1 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 3CE967CB1F7E8335003FD6A1 /* art.scnassets */; };
 		3CE967CE1F7E8335003FD6A1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE967CD1F7E8335003FD6A1 /* ViewController.swift */; };
@@ -16,10 +18,13 @@
 		3CE967D61F7E8335003FD6A1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3CE967D41F7E8335003FD6A1 /* LaunchScreen.storyboard */; };
 		3CE967E31F7E8AD9003FD6A1 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE967E11F7E8AD9003FD6A1 /* LoginViewController.swift */; };
 		3CE967E61F7E8DA6003FD6A1 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE967E51F7E8DA6003FD6A1 /* MapViewController.swift */; };
+		3CF071771F8FCECD00816002 /* MessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF071761F8FCECD00816002 /* MessageViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		3C486F781F7F605D009040D1 /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
+		3C57ECE81F8C8AC3005D9D6F /* myar.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = myar.xcdatamodel; sourceTree = "<group>"; };
+		3C57ECEB1F8C8E0B005D9D6F /* Extensive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensive.swift; sourceTree = "<group>"; };
 		3CE967C61F7E8335003FD6A1 /* MyAR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyAR.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3CE967C91F7E8335003FD6A1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3CE967CB1F7E8335003FD6A1 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
@@ -30,6 +35,7 @@
 		3CE967D71F7E8335003FD6A1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3CE967E11F7E8AD9003FD6A1 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		3CE967E51F7E8DA6003FD6A1 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		3CF071761F8FCECD00816002 /* MessageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +86,9 @@
 				3CE967E11F7E8AD9003FD6A1 /* LoginViewController.swift */,
 				3CE967E51F7E8DA6003FD6A1 /* MapViewController.swift */,
 				3C486F781F7F605D009040D1 /* RegisterViewController.swift */,
+				3C57ECE71F8C8AC3005D9D6F /* myar.xcdatamodeld */,
+				3C57ECEB1F8C8E0B005D9D6F /* Extensive.swift */,
+				3CF071761F8FCECD00816002 /* MessageViewController.swift */,
 			);
 			path = MyAR;
 			sourceTree = "<group>";
@@ -164,8 +173,11 @@
 			files = (
 				3CE967E31F7E8AD9003FD6A1 /* LoginViewController.swift in Sources */,
 				3C486F791F7F605D009040D1 /* RegisterViewController.swift in Sources */,
+				3CF071771F8FCECD00816002 /* MessageViewController.swift in Sources */,
+				3C57ECE91F8C8AC3005D9D6F /* myar.xcdatamodeld in Sources */,
 				3CE967CE1F7E8335003FD6A1 /* ViewController.swift in Sources */,
 				3CE967CA1F7E8335003FD6A1 /* AppDelegate.swift in Sources */,
+				3C57ECEC1F8C8E0B005D9D6F /* Extensive.swift in Sources */,
 				3CE967E61F7E8DA6003FD6A1 /* MapViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -351,6 +363,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		3C57ECE71F8C8AC3005D9D6F /* myar.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				3C57ECE81F8C8AC3005D9D6F /* myar.xcdatamodel */,
+			);
+			currentVersion = 3C57ECE81F8C8AC3005D9D6F /* myar.xcdatamodel */;
+			path = myar.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 3CE967BE1F7E8335003FD6A1 /* Project object */;
 }

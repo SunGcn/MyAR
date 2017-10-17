@@ -10,6 +10,7 @@
 import UIKit
 import MapKit
 import CoreLocation
+import CoreData
 
 class MapViewController: UIViewController,UITextViewDelegate, MKMapViewDelegate, CLLocationManagerDelegate {
     
@@ -17,6 +18,8 @@ class MapViewController: UIViewController,UITextViewDelegate, MKMapViewDelegate,
     let locationManager = CLLocationManager()
     var currentLocation:CLLocation!
     var navigationBar:UINavigationBar?
+    
+    var heading:Double = 0.0
     
     var textView:UITextView!// 输入框
     var textViewY:CGFloat!
@@ -28,6 +31,11 @@ class MapViewController: UIViewController,UITextViewDelegate, MKMapViewDelegate,
     var cameraBtnWidth:CGFloat = 40
     var cameraBtnHeight:CGFloat = 40
  
+    var sendBtn:UIButton!
+    var sendBtnY:CGFloat!
+    var sendBtnWidth:CGFloat = 40
+    var sendBtnHeight:CGFloat = 40
+    
     var currentY:CGFloat!
     
     override func viewDidLoad()
@@ -45,7 +53,8 @@ class MapViewController: UIViewController,UITextViewDelegate, MKMapViewDelegate,
         self.mainMapView.mapType = MKMapType.mutedStandard
         self.mainMapView.delegate = self
         self.mainMapView.showsUserLocation = true
-        self.mainMapView.userTrackingMode = MKUserTrackingMode.followWithHeading
+        self.mainMapView.showsCompass = false
+        self.mainMapView.userTrackingMode = MKUserTrackingMode.follow
         
         //创建一个MKCoordinateSpan对象，设置地图的范围（越小越精确）
         //let latDelta = 0.05
@@ -62,16 +71,26 @@ class MapViewController: UIViewController,UITextViewDelegate, MKMapViewDelegate,
         //设置显示区域
         //self.mainMapView.setRegion(currentRegion, animated: true)
         
-        //创建一个大头针对象
-        let objectAnnotation = MKPointAnnotation()
-        //设置大头针的显示位置
-        objectAnnotation.coordinate = CLLocation(latitude: 32.029171,longitude: 118.788231).coordinate
-        //设置点击大头针之后显示的标题
-        objectAnnotation.title = "南京夫子庙"
-        //设置点击大头针之后显示的描述
-        objectAnnotation.subtitle = "南京市秦淮区秦淮河北岸中华路"
-        //添加大头针
-        self.mainMapView.addAnnotation(objectAnnotation)
+        
+        let context = persistentContainer.viewContext
+        //声明数据的请求
+        let fetchRequest = NSFetchRequest<Message>(entityName:"Message")
+        //查询操作
+        do {
+            let fetchedObjects = try context.fetch(fetchRequest)
+            
+            //遍历查询的结果
+            for info in fetchedObjects{
+                let pointAnnotation = MKPointAnnotation()
+                pointAnnotation.coordinate = CLLocationCoordinate2D(latitude: info.latitude, longitude: info.longitude)
+                pointAnnotation.title = info.name
+                pointAnnotation.subtitle = info.content
+                self.mainMapView.addAnnotation(pointAnnotation)
+            }
+        }
+        catch {
+            fatalError("不能保存：\(error)")
+        }
         
         
         locationManager.delegate = self
@@ -81,13 +100,21 @@ class MapViewController: UIViewController,UITextViewDelegate, MKMapViewDelegate,
         locationManager.requestWhenInUseAuthorization()//弹出用户授权对话框，使用程序期间授权（ios8后)
         //requestAlwaysAuthorization;//始终授权
         locationManager.startUpdatingLocation()
+        locationManager.startUpdatingHeading()
         
-        cameraBtnY = mainSize.height - 50
+        cameraBtnY = 20
         cameraBtn = UIButton(type: UIButtonType.system)
-        cameraBtn.frame = CGRect(x: mainSize.width - 50, y: cameraBtnY, width: cameraBtnWidth, height: cameraBtnHeight)
+        cameraBtn.frame = CGRect(x: 10, y: cameraBtnY, width: cameraBtnWidth, height: cameraBtnHeight)
         cameraBtn.setImage(UIImage(named:"camera"), for: UIControlState.normal)
         cameraBtn.addTarget(self, action: #selector(MapViewController.camera), for: UIControlEvents.touchUpInside)
         self.view.addSubview(cameraBtn)
+        
+        sendBtnY = mainSize.height - 50
+        sendBtn = UIButton(type: UIButtonType.system)
+        sendBtn.frame = CGRect(x: mainSize.width - 50,y: sendBtnY,width: sendBtnWidth,height: sendBtnHeight)
+        sendBtn.setImage(UIImage(named:"send"), for: UIControlState.normal)
+        sendBtn.addTarget(self, action: #selector(MapViewController.send), for: UIControlEvents.touchUpInside)
+        self.view.addSubview(sendBtn)
         
         textViewWidth = mainSize.width - 70
         textViewY = mainSize.height - 40 - 10
@@ -109,12 +136,12 @@ class MapViewController: UIViewController,UITextViewDelegate, MKMapViewDelegate,
         
         registNotification()
         
+        self.view.addGestureRecognizer(UITapGestureRecognizer(
+            target:self,action:#selector(MapViewController.handleTap(sender:))))
         
-        self.view.addGestureRecognizer(UITapGestureRecognizer(target:self,action:#selector(MapViewController.handleTap(sender:))))
-
     }
     
-    
+    // 点击屏幕空白处收起键盘
     @objc func handleTap(sender:UITapGestureRecognizer){
         if sender.state == .ended{
             self.textView.resignFirstResponder()
@@ -131,10 +158,55 @@ class MapViewController: UIViewController,UITextViewDelegate, MKMapViewDelegate,
         self.dismiss(animated: true, completion: nil)
     }
     
+    //发送按钮事件
+    @objc func send(){
+        //获取textview文本
+        let content = textView.text
+        
+        //保存文本
+        saveContext(messageContent: content!)
+
+        //收起键盘
+        self.textView.resignFirstResponder()
+        
+        //显示发送成功
+        let alertController = UIAlertController(title: "发送成功!", message: nil, preferredStyle: .alert)
+        self.present(alertController, animated: true, completion: nil)
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.7) {
+            self.presentedViewController?.dismiss(animated: false, completion: nil)}
+     
+        //在地图上显示
+        let objectAnnotation = MKPointAnnotation()
+        objectAnnotation.coordinate = CLLocation(latitude: selfLatitude_Double,longitude: selfLongitude_Double).coordinate
+        objectAnnotation.title = USERNAME
+        objectAnnotation.subtitle = content
+        self.mainMapView.addAnnotation(objectAnnotation)
+        
+        //刷新AR界面
+        
+    }
+    
+    //获取手机指南针方向
+    func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
+        self.heading = newHeading.trueHeading
+        //print(heading)
+        selfDirection_Double = heading
+        print("Head")
+        print(selfDirection_Double)
+    }
+    
+    //获取手机定位
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         self.currentLocation = locations.last!
-        //print(currentLocation.coordinate.latitude)
+        
+        selfLatitude_Double = currentLocation.coordinate.latitude + LATITUDEDEVIATION
+        selfLongitude_Double = currentLocation.coordinate.longitude + LONGITUDEDEVIATION
+        print("Lati Longi")
+        print(selfLatitude_Double)
+        print(selfLongitude_Double)
     }
+    
+    
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("定位出错拉！！\(error)")
     }
@@ -164,7 +236,7 @@ class MapViewController: UIViewController,UITextViewDelegate, MKMapViewDelegate,
         NotificationCenter.default.addObserver(self, selector: #selector(MapViewController.keyboardWillChange(_:)), name: NSNotification.Name.UITextViewTextDidChange, object: nil)
     }
     
-    // 将要出现
+    // 键盘将要出现
     @objc func keyboardWillShow(_ notification:Notification){
         
         // 通知传参
@@ -184,7 +256,7 @@ class MapViewController: UIViewController,UITextViewDelegate, MKMapViewDelegate,
             self.textView.textColor = UIColor.black
             //let w = self.sendButton.frame.origin.x
             self.textView.frame = CGRect(x: 10, y: self.textViewY - deltaY, width: self.textView.frame.width ,height: self.textView.frame.height)
-            self.cameraBtn.frame = CGRect(x: self.cameraBtn.frame.origin.x,y: self.cameraBtnY - deltaY,width: self.cameraBtn.frame.width,height: self.cameraBtn.frame.height)
+            self.sendBtn.frame = CGRect(x: self.sendBtn.frame.origin.x,y: self.sendBtnY - deltaY,width: self.sendBtn.frame.width,height: self.sendBtn.frame.height)
             //self.sendButton.frame = CGRect(x: SCREENWIDTH - self.textView.frame.width - 10 - 10, y: 340, width: 60,height: h)
             // self.sendButton.frame = CGRect(x: w, y: 345, width: 60, height: 36)
         }
@@ -198,7 +270,7 @@ class MapViewController: UIViewController,UITextViewDelegate, MKMapViewDelegate,
         currentY = self.textView.frame.origin.y
     }
     
-    // 将要收起
+    // 键盘将要收起
     @objc func keyboardWillHid(_ notification:Notification){
         
         let userInfo  = notification.userInfo
@@ -208,7 +280,7 @@ class MapViewController: UIViewController,UITextViewDelegate, MKMapViewDelegate,
             //self.view.transform = CGAffineTransform.identity
             
             self.textView.frame = CGRect(x: 10, y: self.textViewY, width: self.textViewWidth,height: self.textViewHeight)
-            self.cameraBtn.frame = CGRect(x: self.cameraBtn.frame.origin.x,y: self.cameraBtnY,width: self.cameraBtnWidth,height: self.cameraBtnHeight)
+            self.sendBtn.frame = CGRect(x: self.sendBtn.frame.origin.x,y: self.sendBtnY,width: self.sendBtnWidth,height: self.sendBtnHeight)
             //self.backgroundView.frame = CGRect(x: 10,y: self.view.frame.height - 40,width: self.textViewW+2,height: 32)
             //let w = self.textView.frame.width
             ////self.sendButton.frame = CGRect(x: 20 + w, y:self.view.frame.height - self.textViewHeight - 10 , width: 60, height: 36)

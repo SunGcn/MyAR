@@ -6,15 +6,6 @@
 //  Copyright © 2017年 孙港. All rights reserved.
 //
 
-
-//
-//  LoginViewController.swift
-//  MyAR
-//
-//  Created by 孙港 on 2017/9/28.
-//  Copyright © 2017年 孙港. All rights reserved.
-//
-
 import UIKit
 
 class LoginViewController: UIViewController,UITextFieldDelegate{
@@ -67,7 +58,7 @@ class LoginViewController: UIViewController,UITextFieldDelegate{
         txtUser.leftViewMode = UITextFieldViewMode.always
         //用户名输入框左侧图标
         let imgUser =  UIImageView(frame:CGRect(x:11, y:11, width:22, height:22))
-        imgUser.image = UIImage(named:"user")
+        imgUser.image = UIImage(named:"id")
         txtUser.leftView!.addSubview(imgUser)
         vLogin.addSubview(txtUser)
         
@@ -119,27 +110,44 @@ class LoginViewController: UIViewController,UITextFieldDelegate{
         quitBtn.contentHorizontalAlignment = .right
         quitBtn.addTarget(self, action: #selector(LoginViewController.quit), for: UIControlEvents.touchUpInside)
         self.view.addSubview(quitBtn)
-       
+     
+        
+        self.view.addGestureRecognizer(UITapGestureRecognizer(
+            target:self,action:#selector(LoginViewController.handleTap(sender:))))
     }
 
+    // 点击屏幕空白处收起键盘
+    @objc func handleTap(sender:UITapGestureRecognizer){
+        if sender.state == .ended{
+            self.txtUser.resignFirstResponder()
+            self.txtPwd.resignFirstResponder()
+        }
+    }
+    
     @objc func login(){
-        self.txtUser.resignFirstResponder()
-        self.txtPwd.resignFirstResponder()
-        let alertController = UIAlertController(title: "登录成功!",
+        if ifUser(id: txtUser.text!,pwd:txtPwd.text!){
+            self.txtUser.resignFirstResponder()
+            self.txtPwd.resignFirstResponder()
+            let alertController = UIAlertController(title: "登录成功!",
                                                 message: nil, preferredStyle: .alert)
-        self.present(alertController, animated: true, completion: nil)
-        //DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+            self.present(alertController, animated: true, completion: nil)
+            //DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
             
             //self.presentedViewController?.dismiss(animated: false, completion: nil)
-        //}
-        self.presentingViewController?.dismiss(animated: true, completion: nil)
-        
+            //}
+            self.presentingViewController?.dismiss(animated: true, completion: nil)
+        }
+        else{
+            //显示发送成功
+            let alertController = UIAlertController(title: "登录失败!", message: nil, preferredStyle: .alert)
+            self.present(alertController, animated: true, completion: nil)
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.7) {
+                self.presentedViewController?.dismiss(animated: false, completion: nil)}
+        }
     }
     
     @objc func quit(){
-        
         self.dismiss(animated: true, completion: nil)
-        
     }
     
     @objc func register(){
